@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tania Bozheva — Coaching</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:   #1a1a1a;
+    --white:   #ffffff;
+    --teal:    #5F9EA0;
+    --teal-deep: #4d8a8c;
+    --teal-pale: #e8f4f4;
+    --teal-mist: #f3f9f9;
+    --peach:   #FFDAB9;
+    --peach-pale: #fff5ed;
+    --peach-deep: #c07040;
+    --charcoal: #444343;
+    --mid:     #6b7a7a;
+    --cream:   #fafafa;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--black); font-size: 17px; line-height: 1.7; }
+
+  /* ---------- MYSTICAL DECOR ---------- */
+  .sparkle { display: inline-block; vertical-align: middle; color: var(--teal); }
+  .sparkle.peach { color: var(--peach-deep); }
+  .sparkle svg { display: block; }
+
+  /* faint starfield used in select sections */
+  .starfield {
+    position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      radial-gradient(circle, rgba(95,158,160,0.35) 1px, transparent 1.2px),
+      radial-gradient(circle, rgba(192,112,64,0.22) 1px, transparent 1.2px);
+    background-size: 90px 90px, 130px 130px;
+    background-position: 0 0, 40px 60px;
+    opacity: 0.55;
+  }
+
+  /* minimal etched divider — thin line with a small geometric mark */
+  .constellation {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    margin: 0 auto; max-width: 320px; opacity: 0.7;
+  }
+  .constellation .line { flex: 1; height: 1px; background: rgba(95,158,160,0.4); }
+  .constellation .mark { width: 8px; height: 8px; border: 1px solid var(--teal); transform: rotate(45deg); }
+  .constellation .dot, .constellation .sparkle, .constellation .moon { display: none; }
+
+  /* tiny floating sparkle accents for sections */
+  .deco-orbit {
+    position: absolute; pointer-events: none; opacity: 0.55; color: var(--teal);
+  }
+
+  /* Large line-art background pieces */
+  .art-bg {
+    position: absolute; pointer-events: none; z-index: 0; color: var(--teal);
+  }
+  .art-bg svg { width: 100%; height: 100%; display: block; }
+  .art-bg.splitting-head { right: -40px; bottom: 40px; width: 280px; height: 360px; opacity: 0.22; }
+  .art-bg.mystic-mirror { left: 50%; top: 50%; transform: translate(-50%, -50%); width: 320px; height: 480px; opacity: 0.45; }
+  @media (max-width: 960px) {
+    .art-bg.splitting-head { width: 200px; height: 260px; right: -30px; bottom: 20px; opacity: 0.18; }
+    .art-bg.mystic-mirror { width: 220px; height: 340px; }
+  }
+
+  /* ---------- NAV ---------- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 64px;
+    background: rgba(255,255,255,0.95); backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(95,158,160,0.15);
+  }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: var(--black); letter-spacing: 0.04em; display: flex; align-items: center; gap: 8px; }
+  .nav-logo .sparkle { color: var(--teal); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--mid); font-size: 0.82rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--teal); }
+  .nav-icons { display: flex; gap: 16px; align-items: center; }
+  .nav-icons a { color: var(--charcoal); transition: color 0.2s; }
+  .nav-icons a:hover { color: var(--teal); }
+  .nav-icons svg { width: 19px; height: 19px; }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center; padding-top: 80px; overflow: hidden;
+    background: linear-gradient(180deg, #fdfcfb 0%, var(--white) 60%);
+  }
+  .hero .starfield { display: none; }
+  .hero-left { position: relative; z-index: 2; max-width: 640px; padding: 80px 40px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .hero-ornament { margin-bottom: 22px; opacity: 0; animation: fadeUp 0.6s ease 0s forwards; color: var(--teal); }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 0.73rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--teal); margin-bottom: 24px;
+    opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after { content: ''; display: inline-block; width: 22px; height: 1px; background: var(--teal); }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.6rem, 3.8vw, 3.8rem); line-height: 1.08; color: var(--black); margin-bottom: 20px;
+    opacity: 0; animation: fadeUp 0.6s ease 0.25s forwards;
+    position: relative;
+  }
+  .hero h1 .h1-sparkle { color: var(--peach-deep); margin: 0 4px; vertical-align: super; font-size: 0.45em; opacity: 0.85; }
+  .hero-sub {
+    font-size: 1.05rem; color: var(--mid); font-weight: 300; max-width: 440px;
+    margin-bottom: 32px; line-height: 1.65;
+    opacity: 0; animation: fadeUp 0.6s ease 0.4s forwards;
+  }
+  .hero-credentials { display: flex; flex-direction: column; gap: 9px; margin-bottom: 44px; opacity: 0; animation: fadeUp 0.6s ease 0.55s forwards; }
+  .cred-item { display: flex; align-items: center; gap: 10px; font-size: 0.86rem; color: var(--charcoal); }
+  .cred-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--peach); border: 1.5px solid var(--teal); flex-shrink: 0; }
+  .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.6s ease 0.7s forwards; }
+
+  /* Hero right — celestial empty state */
+  .hero-right {
+    position: relative; height: 100vh; overflow: hidden;
+    background: linear-gradient(160deg, var(--teal-mist) 0%, var(--peach-pale) 100%);
+    opacity: 0; animation: fadeIn 1s ease 0.4s forwards;
+  }
+  .hero-right img { width: 100%; height: 100%; object-fit: cover; object-position: 60% top; display: block; position: relative; z-index: 2; }
+  .hero-right .art-bg.mystic-mirror { color: var(--teal); }
+  .hero-right::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0.18) 0%, transparent 40%), linear-gradient(0deg, rgba(255,255,255,0.1) 0%, transparent 30%);
+    pointer-events: none;
+  }
+  #drop-zone {
+    position: absolute; inset: 24px; z-index: 10; border-radius: 24px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.55); backdrop-filter: blur(3px);
+    border: 1.5px dashed rgba(95,158,160,0.55); cursor: pointer; transition: background 0.2s;
+  }
+  #drop-zone:hover, #drop-zone.drag-over { background: rgba(255,255,255,0.75); border-color: var(--teal); }
+  #drop-zone.hidden { display: none; }
+  #drop-zone svg { width: 38px; height: 38px; color: var(--teal); margin-bottom: 14px; opacity: 0.75; }
+  #drop-zone p { font-size: 0.86rem; color: var(--teal); font-weight: 500; text-align: center; line-height: 1.5; letter-spacing: 0.02em; }
+  #drop-zone p small { display: block; color: var(--mid); font-weight: 400; font-size: 0.78rem; margin-top: 4px; letter-spacing: 0; }
+  #drop-zone input { display: none; }
+  .hero-badge {
+    position: absolute; bottom: 36px; left: 36px;
+    background: rgba(255,255,255,0.96); border-radius: 16px; padding: 18px 24px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.08); z-index: 2; backdrop-filter: blur(8px);
+  }
+  .hero-badge-name { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--black); display: block; margin-bottom: 3px; }
+  .hero-badge-role { font-size: 0.77rem; color: var(--mid); line-height: 1.4; }
+
+  /* ---------- BUTTONS ---------- */
+  .btn { display: inline-block; padding: 13px 30px; border-radius: 50px; font-size: 0.86rem; font-weight: 500; letter-spacing: 0.04em; text-decoration: none; transition: all 0.25s ease; cursor: pointer; border: none; }
+  .btn-teal { background: var(--teal); color: var(--white); }
+  .btn-teal:hover { background: var(--teal-deep); box-shadow: 0 8px 28px rgba(95,158,160,0.32); transform: translateY(-2px); }
+  .btn-peach { background: var(--peach); color: var(--black); }
+  .btn-peach:hover { background: #f5c8a0; box-shadow: 0 8px 28px rgba(255,218,185,0.5); transform: translateY(-2px); }
+  .btn-outline { background: transparent; color: var(--teal); border: 1.5px solid var(--teal); }
+  .btn-outline:hover { background: var(--teal); color: var(--white); }
+
+  /* ---------- SHARED ---------- */
+  .section-wrap { max-width: 1080px; margin: 0 auto; padding: 100px 40px; position: relative; }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-size: 0.71rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--teal); font-weight: 500; margin-bottom: 12px;
+  }
+  .section-label::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--teal); }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem, 2.8vw, 2.5rem); color: var(--black); line-height: 1.18; margin-bottom: 52px; }
+  .title-flourish { display: none; }
+
+  /* divider used between sections */
+  .section-divider { padding: 28px 24px 8px; background: var(--white); }
+
+  /* ---------- TOPICS ---------- */
+  .topics-section { background: var(--cream); border-top: 1px solid rgba(95,158,160,0.1); border-bottom: 1px solid rgba(95,158,160,0.1); }
+  .topics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .topic-card { background: var(--white); border-radius: 18px; padding: 32px 28px; border: 1px solid rgba(95,158,160,0.12); transition: all 0.25s ease; display: grid; grid-template-columns: 72px 1fr; gap: 20px; align-items: start; }
+  .topic-card:hover { border-color: var(--teal); transform: translateY(-3px); box-shadow: 0 12px 36px rgba(95,158,160,0.12); }
+  .topic-icon-wrap { width: 64px; height: 64px; flex-shrink: 0; }
+  .topic-icon-wrap svg { width: 64px; height: 64px; }
+  .topic-title { font-family: 'DM Serif Display', serif; font-size: 1.08rem; color: var(--black); margin-bottom: 8px; line-height: 1.25; }
+  .topic-desc { font-size: 0.83rem; color: var(--mid); line-height: 1.6; }
+
+  /* ---------- 4-AREAS ---------- */
+  .areas-section { background: var(--white); position: relative; overflow: hidden; }
+  .areas-section .deco-orbit { top: 80px; right: 40px; }
+  .areas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .area-card {
+    position: relative;
+    border-radius: 20px; padding: 36px 32px; border: 1px solid rgba(95,158,160,0.18); background: var(--white); transition: all 0.25s ease;
+    overflow: hidden;
+  }
+  .area-card::before { content: none; }
+  .area-card:hover { border-color: var(--teal); box-shadow: 0 12px 36px rgba(95,158,160,0.12); transform: translateY(-3px); }
+  .area-emblem { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+  .area-icon { width: 40px; height: 40px; color: var(--teal); flex-shrink: 0; }
+  .area-icon svg { width: 100%; height: 100%; display: block; }
+  .area-num { font-family: 'DM Serif Display', serif; font-size: 0.78rem; color: var(--mid); letter-spacing: 0.18em; }
+  .area-card h3 { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--black); margin-bottom: 14px; line-height: 1.2; }
+  .area-comes { font-size: 0.82rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 8px; margin-top: 18px; }
+  .area-list { list-style: none; margin-bottom: 16px; }
+  .area-list li { font-size: 0.86rem; color: var(--charcoal); padding: 3px 0; padding-left: 16px; position: relative; line-height: 1.5; }
+  .area-list li::before { content: '—'; position: absolute; left: 0; color: var(--teal); font-size: 0.78rem; top: 2px; }
+  .area-shift { font-size: 0.84rem; color: var(--teal); font-weight: 500; margin-top: 18px; padding-top: 18px; border-top: 1px dashed rgba(95,158,160,0.3); }
+
+  /* ---------- FORMAT ---------- */
+  .format-section { background: var(--teal-mist); position: relative; overflow: hidden; }
+  .format-section .starfield { display: none; }
+  .format-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; position: relative; z-index: 2; }
+  .format-block h3 { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--black); margin-bottom: 16px; }
+  .format-block p { font-size: 0.93rem; color: var(--charcoal); line-height: 1.75; margin-bottom: 14px; }
+  .format-block ul { list-style: none; }
+  .format-block ul li { font-size: 0.9rem; color: var(--charcoal); padding: 5px 0 5px 18px; position: relative; line-height: 1.55; }
+  .format-block ul li::before { content: '—'; position: absolute; left: 0; color: var(--teal); font-size: 0.78rem; top: 7px; }
+  .format-block p + ul.pyramid { margin-top: -6px; }
+  .format-block ul.pyramid { list-style: none; text-align: left; padding: 0 0 2px; }
+  .format-block ul.pyramid li { padding: 1px 0 1px 18px; position: relative; color: var(--charcoal); font-size: 0.94rem; line-height: 1.4; }
+  .format-block ul.pyramid li::before { content: '·'; position: absolute; left: 4px; top: 1px; color: var(--teal); font-size: 1.1rem; line-height: 1.4; }
+  .format-note { background: var(--white); border-radius: 14px; padding: 22px 24px; margin-top: 22px; font-size: 0.88rem; color: var(--charcoal); line-height: 1.65; border-left: 3px solid var(--peach); box-shadow: 0 4px 16px rgba(95,158,160,0.06); }
+  .format-note strong { color: var(--black); }
+
+  /* ---------- TESTIMONIALS ---------- */
+  .testimonials-outer { background: var(--cream); padding: 100px 40px; position: relative; overflow: hidden; border-top: 1px solid rgba(95,158,160,0.12); border-bottom: 1px solid rgba(95,158,160,0.12); }
+  .testimonials-outer .starfield { display: none; }
+  .testimonials-inner { max-width: 1080px; margin: 0 auto; position: relative; z-index: 2; }
+  .testimonials-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .t-card {
+    position: relative;
+    background: var(--white); border: 1px solid rgba(95,158,160,0.18); border-radius: 18px; padding: 32px 28px; transition: all 0.25s ease; display: flex; flex-direction: column;
+  }
+  .t-card:hover { border-color: var(--teal); box-shadow: 0 12px 36px rgba(95,158,160,0.12); transform: translateY(-3px); }
+  .t-card.wide { grid-column: span 2; background: linear-gradient(135deg, var(--teal-pale) 0%, var(--peach-pale) 100%); border-color: rgba(95,158,160,0.25); }
+  .t-quote { font-family: 'DM Serif Display', serif; font-size: 2.4rem; color: var(--peach-deep); line-height: 1; opacity: 0.7; margin-bottom: 6px; }
+  .t-text { color: var(--charcoal); font-size: 0.93rem; line-height: 1.72; margin-bottom: 20px; flex-grow: 1; }
+  .t-text strong { color: var(--black); font-weight: 500; }
+  .t-author { font-size: 0.76rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); font-weight: 500; }
+
+  /* ---------- ABOUT ---------- */
+  .about-section { background: var(--white); position: relative; overflow: hidden; }
+  .about-section .deco-orbit { bottom: 60px; left: 30px; }
+  .about-grid { display: grid; grid-template-columns: 1fr; gap: 0; max-width: 720px; margin: 0 auto; position: relative; z-index: 2; }
+  .about-content h2 { font-family: 'DM Serif Display', serif; font-size: clamp(1.7rem, 2.4vw, 2.2rem); color: var(--black); line-height: 1.25; margin-bottom: 22px; margin-top: 8px; }
+  .about-content h2 em { font-style: italic; color: var(--teal); }
+  .about-content p { color: var(--charcoal); font-size: 0.97rem; margin-bottom: 18px; line-height: 1.75; }
+  .quote-block { position: relative; border-left: 3px solid var(--peach); padding: 24px 28px 24px 32px; background: var(--peach-pale); border-radius: 0 14px 14px 0; margin: 30px 0; }
+  .quote-block::before { content: none; }
+  .quote-block p { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 1.07rem; color: var(--black); line-height: 1.5; margin-bottom: 10px; }
+  .quote-block cite { font-size: 0.77rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--peach-deep); font-style: normal; }
+  .about-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 36px; }
+
+  /* ---------- CTA ---------- */
+  .cta-section { background: linear-gradient(135deg, var(--teal) 0%, #6fb0b2 100%); padding: 100px 40px; position: relative; overflow: hidden; }
+  .cta-section .starfield {
+    background-image: radial-gradient(circle, rgba(255,255,255,0.25) 1px, transparent 1.2px);
+    background-size: 110px 110px;
+    opacity: 0.4;
+  }
+  .cta-inner { max-width: 680px; margin: 0 auto; text-align: center; position: relative; z-index: 2; }
+  .cta-section .section-label { color: rgba(255,255,255,0.85); justify-content: center; }
+  .cta-section .section-label .sparkle { color: var(--peach); }
+  .cta-section h2 { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem, 3vw, 2.6rem); color: var(--white); line-height: 1.2; margin-bottom: 20px; }
+  .cta-section h2 .h2-sparkle { color: var(--peach); font-size: 0.5em; vertical-align: super; margin: 0 4px; opacity: 0.85; }
+  .cta-section p { color: rgba(255,255,255,0.88); font-size: 1rem; margin-bottom: 36px; line-height: 1.7; }
+  .cta-note { font-size: 0.82rem; color: rgba(255,255,255,0.75); margin-top: 18px; font-style: italic; }
+  .btn-white { background: var(--white); color: var(--teal); font-weight: 500; }
+  .btn-white:hover { background: var(--peach-pale); box-shadow: 0 8px 28px rgba(0,0,0,0.15); transform: translateY(-2px); }
+
+  /* ---------- FOOTER ---------- */
+  footer { background: var(--black); padding: 48px 64px 34px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+  .footer-logo { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--white); letter-spacing: 0.04em; display: flex; align-items: center; gap: 8px; }
+  .footer-logo .sparkle { color: var(--peach); }
+  .footer-copy { font-size: 0.77rem; color: rgba(255,255,255,0.35); }
+  .footer-icons { display: flex; gap: 18px; }
+  .footer-icons a { color: rgba(255,255,255,0.45); transition: color 0.2s; }
+  .footer-icons a:hover { color: var(--peach); }
+  .footer-icons svg { width: 19px; height: 19px; }
+
+  /* ---------- ANIMATIONS ---------- */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes twinkle { 0%, 100% { opacity: 0.4; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
+  .twinkle { animation: twinkle 4.5s ease-in-out infinite; }
+  .twinkle.delay-1 { animation-delay: 1.2s; }
+  .twinkle.delay-2 { animation-delay: 2.4s; }
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 960px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { height: 60vw; min-height: 300px; }
+    .hero-left { padding: 60px 28px 40px; }
+    .topics-grid, .areas-grid, .format-grid { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .t-card.wide { grid-column: span 1; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .section-wrap { padding: 70px 24px; }
+    .testimonials-outer, .cta-section { padding: 70px 24px; }
+    footer { padding: 40px 24px 28px; flex-direction: column; text-align: center; }
+    .topic-card { grid-template-columns: 56px 1fr; gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============= REUSABLE SVG DEFINITIONS ============= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- AREA ICONS (mystic-intellectual) -->
+    <!-- 01 — Mountain inside circle: groundedness / inner foundation -->
+    <symbol id="icon-mountain" viewBox="0 0 36 36">
+      <g fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="18" cy="18" r="15.5"/>
+        <path d="M6 24 L12 16 L16 20 L22 11 L30 24 Z"/>
+        <circle cx="22.5" cy="9" r="1.2" fill="currentColor"/>
+        <line x1="6" y1="24" x2="30" y2="24" opacity="0.5"/>
+      </g>
+    </symbol>
+
+    <!-- 02 — Vesica Piscis: two overlapping circles, sacred geometry of relationship -->
+    <symbol id="icon-vesica" viewBox="0 0 36 36">
+      <g fill="none" stroke="currentColor" stroke-width="1.1">
+        <circle cx="13" cy="18" r="10"/>
+        <circle cx="23" cy="18" r="10"/>
+        <line x1="18" y1="8" x2="18" y2="28" opacity="0.4" stroke-dasharray="1 2"/>
+      </g>
+    </symbol>
+
+    <!-- 03 — Compass / cardinal directions: true north -->
+    <symbol id="icon-compass" viewBox="0 0 36 36">
+      <g fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="18" cy="18" r="15.5"/>
+        <path d="M18 4 L21 18 L18 32 L15 18 Z"/>
+        <path d="M18 4 L21 18 L18 18 Z" fill="currentColor" opacity="0.85"/>
+        <circle cx="18" cy="18" r="1.4" fill="currentColor"/>
+        <line x1="18" y1="3" x2="18" y2="6" opacity="0.6"/>
+        <line x1="18" y1="30" x2="18" y2="33" opacity="0.6"/>
+        <line x1="3" y1="18" x2="6" y2="18" opacity="0.6"/>
+        <line x1="30" y1="18" x2="33" y2="18" opacity="0.6"/>
+      </g>
+    </symbol>
+
+    <!-- 04 — Tree with roots: belonging, putting down roots -->
+    <symbol id="icon-tree" viewBox="0 0 36 36">
+      <g fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="18" cy="14" r="9" opacity="0.5"/>
+        <line x1="18" y1="9" x2="18" y2="24"/>
+        <path d="M18 13 L14 11 M18 13 L22 11 M18 17 L13 16 M18 17 L23 16 M18 20 L15 20 M18 20 L21 20"/>
+        <!-- ground line -->
+        <line x1="10" y1="24" x2="26" y2="24" opacity="0.5"/>
+        <!-- roots below -->
+        <path d="M18 24 L13 30 M18 24 L23 30 M18 24 L18 32 M18 28 L15 31 M18 28 L21 31"/>
+      </g>
+    </symbol>
+
+    <!-- Splitting head: side profile with skull opening to cosmos -->
+    <symbol id="art-splitting-head" viewBox="0 0 220 280">
+      <g fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round">
+        <!-- side profile facing right: forehead -> brow -> nose -> lips -> chin -> jaw -> neck -->
+        <polyline points="94,130 102,148 114,160 122,164 122,170 132,178 150,184 144,189 134,193 138,200 130,205 134,210 128,217 134,224 122,230 105,232 90,234 88,250 88,275" stroke-linejoin="round"/>
+        <!-- skull cap "split" — dashed broken line indicating opening -->
+        <path d="M 94 130 Q 108 60 158 78 Q 180 86 176 130" stroke-dasharray="2.5 4" opacity="0.7"/>
+        <!-- decorative inner thread inside the dashed cap (faint constellation arc) -->
+        <path d="M 102 105 Q 132 82 166 102" stroke-dasharray="1 4" opacity="0.45"/>
+        <!-- cosmos emerging from the opening -->
+        <g>
+          <!-- large sparkle -->
+          <path d="M 120 50
+                   C 121 60 124 63 134 64
+                   C 124 65 121 68 120 78
+                   C 119 68 116 65 106 64
+                   C 116 63 119 60 120 50 Z" fill="currentColor"/>
+          <!-- medium sparkle right -->
+          <path d="M 175 35
+                   C 175.5 41 177.5 43 183.5 43.5
+                   C 177.5 44 175.5 46 175 52
+                   C 174.5 46 172.5 44 166.5 43.5
+                   C 172.5 43 174.5 41 175 35 Z" fill="currentColor"/>
+          <!-- small sparkles -->
+          <path d="M 95 30 C 95.3 33.5 96.7 34.7 100.2 35 C 96.7 35.3 95.3 36.5 95 40 C 94.7 36.5 93.3 35.3 89.8 35 C 93.3 34.7 94.7 33.5 95 30 Z" fill="currentColor"/>
+          <path d="M 150 12 C 150.3 15 151.7 16 154.7 16.3 C 151.7 16.6 150.3 17.6 150 20.6 C 149.7 17.6 148.3 16.6 145.3 16.3 C 148.3 16 149.7 15 150 12 Z" fill="currentColor"/>
+          <!-- dots -->
+          <circle cx="78" cy="60" r="1.5" fill="currentColor"/>
+          <circle cx="200" cy="60" r="1.5" fill="currentColor"/>
+          <circle cx="185" cy="100" r="1.2" fill="currentColor"/>
+          <circle cx="80" cy="105" r="1.2" fill="currentColor"/>
+          <circle cx="130" cy="28" r="1" fill="currentColor"/>
+          <!-- subtle rays curving up from opening -->
+          <path d="M 110 90 Q 115 70 120 50" opacity="0.4"/>
+          <path d="M 140 95 Q 155 75 165 55" opacity="0.4"/>
+          <path d="M 160 110 Q 175 95 185 80" opacity="0.4"/>
+        </g>
+      </g>
+    </symbol>
+
+    <!-- Abstract / alchemical mirror — circle with horizon line and center dot -->
+    <symbol id="art-mirror-small" viewBox="0 0 32 32">
+      <g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="16" cy="16" r="13"/>
+        <circle cx="16" cy="16" r="10" opacity="0.35"/>
+        <line x1="5" y1="16" x2="27" y2="16" opacity="0.7"/>
+        <circle cx="16" cy="16" r="0.9" fill="currentColor"/>
+      </g>
+    </symbol>
+
+    <!-- Mystic mirror: ornate hand mirror with celestial reflection -->
+    <symbol id="art-mystic-mirror" viewBox="0 0 220 340">
+      <g fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round">
+        <!-- top finial flourish -->
+        <path d="M 110 18 Q 104 26 110 32 Q 116 26 110 18 Z" fill="currentColor" opacity="0.55"/>
+        <circle cx="110" cy="10" r="2.5" fill="currentColor"/>
+        <!-- outer ornate frame -->
+        <ellipse cx="110" cy="155" rx="92" ry="120"/>
+        <ellipse cx="110" cy="155" rx="80" ry="106" stroke-dasharray="3 4" opacity="0.7"/>
+        <!-- inner reflective surface -->
+        <ellipse cx="110" cy="155" rx="70" ry="94" opacity="0.85"/>
+        <!-- side decorative beads -->
+        <circle cx="14" cy="155" r="2.5" fill="currentColor"/>
+        <circle cx="206" cy="155" r="2.5" fill="currentColor"/>
+        <circle cx="22" cy="100" r="1.5" fill="currentColor"/>
+        <circle cx="198" cy="100" r="1.5" fill="currentColor"/>
+        <circle cx="22" cy="210" r="1.5" fill="currentColor"/>
+        <circle cx="198" cy="210" r="1.5" fill="currentColor"/>
+        <!-- handle -->
+        <line x1="110" y1="275" x2="110" y2="318"/>
+        <ellipse cx="110" cy="285" rx="14" ry="6"/>
+        <path d="M 100 320 Q 110 332 120 320"/>
+        <!-- reflection inside: crescent moon -->
+        <path d="M 130 120 A 30 30 0 1 0 130 180 A 23 23 0 1 1 130 120 Z" fill="currentColor" opacity="0.22"/>
+        <!-- stars inside the mirror -->
+        <path d="M 70 100 C 70.5 105 72.5 106.5 78 107 C 72.5 107.5 70.5 109 70 114 C 69.5 109 67.5 107.5 62 107 C 67.5 106.5 69.5 105 70 100 Z" fill="currentColor"/>
+        <path d="M 75 200 C 75.3 203.5 76.7 204.7 80.2 205 C 76.7 205.3 75.3 206.5 75 210 C 74.7 206.5 73.3 205.3 69.8 205 C 73.3 204.7 74.7 203.5 75 200 Z" fill="currentColor"/>
+        <circle cx="155" cy="195" r="1.5" fill="currentColor"/>
+        <circle cx="90" cy="155" r="1.2" fill="currentColor"/>
+        <circle cx="155" cy="105" r="1.2" fill="currentColor"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ============= NAV ============= -->
+<nav>
+  <div class="nav-logo">Tania Bozheva</div>
+  <ul class="nav-links">
+    <li><a href="#services">Work with me</a></li>
+    <li><a href="#format">Format</a></li>
+    <li><a href="#testimonials">Stories</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <div class="nav-icons">
+    <a href="https://www.instagram.com/theselfishcodependent/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+    </a>
+    <a href="https://www.youtube.com/@theselfishcodependent" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg>
+    </a>
+  </div>
+</nav>
+
+<!-- ============= HERO ============= -->
+<div class="hero">
+  <div class="starfield"></div>
+  <div class="hero-left">
+    <!-- Abstract mirror — quiet philosophical mark -->
+    <div class="hero-ornament" aria-hidden="true">
+      <svg width="26" height="26" viewBox="0 0 32 32"><use href="#art-mirror-small"/></svg>
+    </div>
+    <span class="hero-eyebrow">Coach &amp; psychology practitioner</span>
+    <h1>Tania Bozheva</h1>
+    <p class="hero-sub">We explore what's keeping you stuck in love &amp; work and untangle it together.</p>
+    <div class="hero-credentials">
+      <div class="cred-item"><span class="cred-dot"></span>3.5 years of one-on-one coaching practice</div>
+      <div class="cred-item"><span class="cred-dot"></span>Studying psychology (graduating 2027)</div>
+      <div class="cred-item"><span class="cred-dot"></span>Supervised by a psychoanalytical therapist</div>
+    </div>
+    <div class="hero-cta">
+      <a href="https://calendly.com/taniabozheva/coaching-session" target="_blank" rel="noopener noreferrer" class="btn btn-teal">Book a free intro call</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <!-- mystic mirror as decorative background art -->
+    <div class="art-bg mystic-mirror" aria-hidden="true">
+      <svg><use href="#art-mystic-mirror"/></svg>
+    </div>
+
+    <img id="portrait" src="portrait.jpg" alt="Tania Bozheva" onload="document.getElementById('drop-zone').classList.add('hidden')" onerror="this.style.display='none'">
+
+    <div id="drop-zone">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2"/>
+        <circle cx="9" cy="9" r="2"/>
+        <path d="m21 15-5-5L5 21"/>
+      </svg>
+      <p>Save your portrait as <strong>portrait.jpg</strong><br><small>inside the my-website folder — or drop one here to preview</small></p>
+      <input type="file" accept="image/*">
+    </div>
+  </div>
+</div>
+
+<!-- ============= 4 AREAS DEEP DIVE ============= -->
+<div class="areas-section" id="services">
+  <div class="section-wrap">
+<span class="section-label reveal">
+The root, not the symptom
+    </span>
+<h2 class="section-title reveal">What we actually work on</h2>
+
+    <div class="areas-grid">
+
+      <div class="area-card reveal">
+        <div class="area-emblem">
+          <span class="area-icon"><svg><use href="#icon-mountain"/></svg></span>
+          <span class="area-num">01</span>
+        </div>
+        <h3>Emotional maturity &amp; self-trust</h3>
+        <div class="area-comes">People often say:</div>
+        <ul class="area-list">
+          <li>I can't get myself together</li>
+          <li>I don't know how to regulate my emotions</li>
+          <li>On paper I'm successful but I feel so empty</li>
+        </ul>
+        <div class="area-shift">→ From chaos and self-doubt to grounded inner leadership</div>
+      </div>
+
+      <div class="area-card reveal">
+        <div class="area-emblem">
+          <span class="area-icon"><svg><use href="#icon-vesica"/></svg></span>
+          <span class="area-num">02</span>
+        </div>
+        <h3>Love, dating &amp; relationships</h3>
+        <div class="area-comes">People often say:</div>
+        <ul class="area-list">
+          <li>What's wrong with me?</li>
+          <li>Why does my love life never work?</li>
+          <li>How do I build lasting relationships?</li>
+        </ul>
+        <div class="area-shift">→ From repeating painful dynamics to conscious, adult intimacy</div>
+      </div>
+
+      <div class="area-card reveal">
+        <div class="area-emblem">
+          <span class="area-icon"><svg><use href="#icon-compass"/></svg></span>
+          <span class="area-num">03</span>
+        </div>
+        <h3>Direction, identity &amp; work</h3>
+        <div class="area-comes">People often say:</div>
+        <ul class="area-list">
+          <li>I want more but I'm scared</li>
+          <li>I feel lost about what's next</li>
+          <li>My work drains me but I don't know what else to do</li>
+        </ul>
+        <div class="area-shift">→ From survival and confusion to clarity and aligned action</div>
+      </div>
+
+      <div class="area-card reveal">
+        <div class="area-emblem">
+          <span class="area-icon"><svg><use href="#icon-tree"/></svg></span>
+          <span class="area-num">04</span>
+        </div>
+        <h3>Life abroad &amp; belonging</h3>
+        <div class="area-comes">People often say:</div>
+        <ul class="area-list">
+          <li>Should I stay or move?</li>
+          <li>I feel lonely and disconnected</li>
+          <li>When will I finally feel at home here?</li>
+        </ul>
+        <div class="area-shift">→ From feeling displaced to building a life that feels truly yours</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- constellation divider -->
+<div class="section-divider">
+  <div class="constellation" aria-hidden="true">
+    <span class="line"></span>
+    <span class="mark"></span>
+    <span class="line"></span>
+  </div>
+</div>
+
+<!-- ============= HOW IT WORKS ============= -->
+<div class="format-section" id="format">
+  <div class="starfield"></div>
+  <div class="section-wrap">
+    <span class="section-label reveal">
+Inside the coaching room
+    </span>
+<h2 class="section-title reveal">Format &amp; what to expect</h2>
+    <div class="format-grid">
+      <div class="format-block reveal">
+        <h3>Structure</h3>
+        <p>Sessions happen weekly or bi-weekly and run for 60 minutes. We keep the day and time fixed — consistency is what allows real depth to build.</p>
+        <p>In our first sessions we map your challenges and goals together. From there, each meeting connects what's happening in your life right now to the deeper patterns underneath it.</p>
+        <div class="format-note"><strong>Between sessions:</strong> your work is to reflect on what we discussed. I also offer email support — not a replacement for a session, but useful for short check-ins. Anything that needs depth, we bring into our next meeting.</div>
+      </div>
+      <div class="format-block reveal">
+        <h3>My role &amp; yours</h3>
+        <p>I won't tell you what to do — that builds dependency, not capacity. My job is to help you think clearly, see your own patterns, and learn to trust your inner compass again.</p>
+        <p>Your part of the work:</p>
+        <ul class="pyramid">
+          <li>Show up consistently</li>
+          <li>Reflect between sessions</li>
+          <li>Speak honestly (as much as possible)</li>
+          <li>Notice and share what shifts emotionally or in your life</li>
+        </ul>
+        <div class="format-note"><strong>On choosing a coach:</strong> the research is clear — what matters most isn't the modality, it's the quality of the relationship. That's why the first step is a free 20-minute call, so we can both feel whether the fit is right.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============= TESTIMONIALS ============= -->
+<div class="testimonials-outer" id="testimonials">
+  <div class="starfield"></div>
+  <div class="testimonials-inner">
+    <span class="section-label reveal">
+Client stories
+    </span>
+<h2 class="section-title reveal">What it's actually like to work with me</h2>
+    <div class="testimonials-grid">
+
+      <div class="t-card wide reveal">
+        <div class="t-quote">"</div>
+        <p class="t-text">I started working with Tania when life felt messy. In dating, I was asking myself: <strong>Is it me, or why do I keep repeating the same patterns?</strong> After just three sessions, things started to feel lighter and I started getting the answers. Even people around me noticed — they said I seemed more composed and at ease. Tania is an excellent professional full of empathy. Improvements I feel in my daily life are honestly priceless.</p>
+        <span class="t-author">—Nicolas</span>
+      </div>
+
+      <div class="t-card reveal">
+        <div class="t-quote">"</div>
+        <p class="t-text">I'm genuinely impressed that <strong>after just five sessions, I've noticed such significant changes.</strong> My energy is stable again, I feel productive — and more importantly, I've learned a lot about what triggers me and why. The external conditions haven't changed much but my internal shifts allow me to respond in a completely different way.</p>
+        <span class="t-author">—Kostas</span>
+      </div>
+
+      <div class="t-card reveal">
+        <div class="t-quote">"</div>
+        <p class="t-text">Tania is great at understanding people and their potential. She helped me identify my values and <strong>articulate a future vision for myself.</strong> She gave me confidence, clarity, and a lot of practical tools. I deeply appreciate your time, expertise and passion.</p>
+        <span class="t-author">—Cristina</span>
+      </div>
+
+      <div class="t-card reveal">
+        <div class="t-quote">"</div>
+        <p class="t-text">She didn't just throw advice at me. <strong>She helped me untangle my own thoughts — like handing me a flashlight in a messy room.</strong> If you're on the fence, honestly? Just try it. Sometimes you don't need a lecture, you just need someone who gets it.</p>
+        <span class="t-author">—Fazl</span>
+      </div>
+
+      <div class="t-card reveal">
+        <div class="t-quote">"</div>
+        <p class="t-text">After a friendship that felt like it turned romantic but ended up not being that, I completely lost myself. I tried to make sense of it with AI, but that made it even worse. I had no idea what my place in the world was anymore, and everything felt pointless and unfair. <strong>It was only with Tania that I could start seeing things in a different light.</strong> Because this situation also uncovered a lot of stuff from my childhood that I buried for years. If any situation shocks you to your core, it's okay to ask for help.</p>
+        <span class="t-author">—Jay</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- constellation divider -->
+<div class="section-divider">
+  <div class="constellation" aria-hidden="true">
+    <span class="line"></span>
+    <span class="mark"></span>
+    <span class="line"></span>
+  </div>
+</div>
+
+<!-- ============= ABOUT ============= -->
+<div class="about-section" id="about">
+  <div class="art-bg splitting-head" aria-hidden="true">
+    <svg><use href="#art-splitting-head"/></svg>
+  </div>
+
+  <div class="section-wrap">
+    <div class="about-grid">
+      <div class="about-content reveal">
+        <span class="section-label">
+        About me
+        </span>
+        <h2>I coach because I find <em>people fascinating</em> — and because I'm good at sitting with what's underneath.</h2>
+        <p>Last year I left a stable corporate role to pursue coaching full time. I'd been doing this work for three and a half years and outgrew the rigid coaching format — I wanted to go deeper. So I went back to study psychology.</p>
+        <p>I currently work under the supervision of an experienced psychoanalytical therapist who was herself supervised by Otto Kernberg. That foundation is what lets me take the work past the symptom and into what's actually driving it.</p>
+        <div class="quote-block">
+          <p>"When a person can't find a deep sense of meaning, they distract themselves with pleasure."</p>
+          <cite>— Viktor Frankl</cite>
+        </div>
+        <p>We reach for pleasure when we can't fill our reality with content that matters to us. That's often exactly where people find themselves when they come to me — and, in my experience, it's the most interesting place to start from.</p>
+        <div class="about-cta">
+          <a href="https://calendly.com/taniabozheva/coaching-session" target="_blank" rel="noopener noreferrer" class="btn btn-teal">Book a free coaching call</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============= CTA ============= -->
+<div class="cta-section">
+  <div class="starfield"></div>
+  <div class="cta-inner">
+    <span class="section-label reveal">
+The next step
+    </span>
+    <h2 class="reveal">Without overthinking it</h2>
+    <p class="reveal">If this resonates, the next step is a free 20-minute call. We'll look at what feels stuck and explore how I could best support you. No pressure to decide on the spot — you'll have plenty of space to reflect afterwards.</p>
+    <a href="https://calendly.com/taniabozheva/coaching-session" target="_blank" rel="noopener noreferrer" class="btn btn-white reveal">Book your free intro call</a>
+    <p class="cta-note reveal">If you're waiting until you can explain everything clearly before reaching out — don't. Clarity is built inside the process.</p>
+  </div>
+</div>
+
+<!-- ============= FOOTER ============= -->
+<footer>
+  <div class="footer-logo">Tania Bozheva</div>
+  <p class="footer-copy">© 2026 Tania Bozheva · TVB Collective</p>
+  <div class="footer-icons">
+    <a href="https://www.instagram.com/theselfishcodependent/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+    </a>
+    <a href="https://www.youtube.com/@theselfishcodependent" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg>
+    </a>
+  </div>
+</footer>
+
+<script>
+  // Reveal-on-scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => io.observe(el));
+
+  // Drop zone — load a portrait into the hero
+  const dropZone = document.getElementById('drop-zone');
+  const fileInput = dropZone.querySelector('input');
+  const heroRight = document.querySelector('.hero-right');
+
+  function loadImage(file) {
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      let img = heroRight.querySelector('img');
+      if (!img) {
+        img = document.createElement('img');
+        heroRight.insertBefore(img, dropZone);
+      }
+      img.style.display = '';
+      img.src = e.target.result;
+      dropZone.classList.add('hidden');
+    };
+    reader.readAsDataURL(file);
+  }
+  dropZone.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', (e) => loadImage(e.target.files[0]));
+  ['dragenter', 'dragover'].forEach(ev =>
+    dropZone.addEventListener(ev, (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); })
+  );
+  ['dragleave', 'drop'].forEach(ev =>
+    dropZone.addEventListener(ev, (e) => { e.preventDefault(); dropZone.classList.remove('drag-over'); })
+  );
+  dropZone.addEventListener('drop', (e) => loadImage(e.dataTransfer.files[0]));
+</script>
+</body>
+</html>
