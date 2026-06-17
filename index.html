@@ -7,6 +7,8 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 <style>
@@ -241,6 +243,15 @@
   .t-text { color: var(--charcoal); font-size: 0.93rem; line-height: 1.72; margin-bottom: 20px; flex-grow: 1; }
   .t-text strong { color: var(--black); font-weight: 500; }
   .t-author { font-size: 0.76rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); font-weight: 500; }
+
+  /* ---------- QUIZ BAND ---------- */
+  .quiz-band-outer { background: var(--white); padding: 64px 40px; }
+  .quiz-band { max-width: 1080px; margin: 0 auto; background: linear-gradient(135deg, var(--teal-mist) 0%, var(--peach-pale) 100%); border-radius: 20px; padding: 34px 38px; display: flex; justify-content: space-between; align-items: center; gap: 28px; flex-wrap: wrap; border: 1px solid rgba(95,158,160,0.18); }
+  .quiz-band-text { flex: 1; min-width: 240px; }
+  .quiz-band-text .section-label { margin-bottom: 8px; }
+  .quiz-band-text h3 { font-family: 'DM Serif Display', serif; font-size: clamp(1.3rem, 2vw, 1.55rem); color: var(--black); margin: 0 0 8px; line-height: 1.25; }
+  .quiz-band-text p { font-size: 0.92rem; color: var(--mid); line-height: 1.65; margin: 0; }
+  .quiz-band a.btn { white-space: nowrap; }
 
   /* ---------- ABOUT ---------- */
   .about-section { background: var(--white); position: relative; overflow: hidden; }
@@ -665,12 +676,15 @@ Client stories
   </div>
 </div>
 
-<!-- constellation divider -->
-<div class="section-divider">
-  <div class="constellation" aria-hidden="true">
-    <span class="line"></span>
-    <span class="mark"></span>
-    <span class="line"></span>
+<!-- ============= QUIZ BAND ============= -->
+<div class="quiz-band-outer">
+  <div class="quiz-band reveal">
+    <div class="quiz-band-text">
+      <span class="section-label">A softer way in</span>
+      <h3>What keeps repeating in your love life and why?</h3>
+      <p>Take the 2-minute quiz and find out which pattern keeps showing up in your relationships, and what to do about it.</p>
+    </div>
+    <a href="https://mailchi.mp/5d4202ebd9e7/qoqnu7dgxr" target="_blank" rel="noopener noreferrer" class="btn btn-peach">take the quiz</a>
   </div>
 </div>
 
